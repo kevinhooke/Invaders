@@ -8,13 +8,25 @@ import kh.gameengine.ui.GameCanvas;
 import kh.gameengine.ui.PlayerSprite;
 import kh.gameengine.ui.Sprite;
 import kh.invaders.sprites.InvaderSprite;
+import kh.invaders.sprites.InvaderSprite.MovingDirection;
 
 public class InvadersGameCanvas extends GameCanvas {
 
+	private static final int INVADERS_PER_ROW = 12;
+	private static final int INVADER_ROW_SPACING = 45;
+
 	private static final Color BACKGROUND_COLOR = new Color(0, 0, 0);
 
+	/**
+	 * Tracks number of game loop iterations.
+	 */
 	private long gameLoopTick = 0;
+
+	/**
+	 * Invader row currently being moved. Counts down from 4 to 0 and repeats.
+	 */
 	private int animateInvaderRow = 4;
+
 	private static long ANIMATE_ON_TICK = 2;
 
 	public InvadersGameCanvas() {
@@ -36,62 +48,62 @@ public class InvadersGameCanvas extends GameCanvas {
 
 			// create invader row1
 			InvaderSprite invaderType1 = null;
-			for (int i = 0; i < 12; i++) {
+			for (int invaderInCurrentRow = 0; invaderInCurrentRow < INVADERS_PER_ROW; invaderInCurrentRow++) {
 				invaderType1 = new InvaderSprite("inv3a.png", "inv3b.png");
-				int xIncrement = i * 34;
-
+				int xIncrement = invaderInCurrentRow * 30;
+				
 				invaderType1.setX(80 + xIncrement);
-				invaderType1.setY(80);
+				invaderType1.setY(80 + (INVADER_ROW_SPACING * 0));
 				invaderType1.setVisible(true);
-				this.spritesArray[0][i] = invaderType1;
+				this.spritesArray[0][invaderInCurrentRow] = invaderType1;
 			}
 
 			// create invader row2
 			InvaderSprite invaderType2 = null;
-			for (int i = 0; i < 12; i++) {
+			for (int invaderInCurrentRow = 0; invaderInCurrentRow < INVADERS_PER_ROW; invaderInCurrentRow++) {
 				invaderType2 = new InvaderSprite("inv2a.png", "inv2b.png");
-				int xIncrement = i * 30;
+				int xIncrement = invaderInCurrentRow * 30;
 
 				invaderType2.setX(80 + xIncrement);
-				invaderType2.setY(110);
+				invaderType2.setY(80 + (INVADER_ROW_SPACING * 1));
 				invaderType2.setVisible(true);
-				this.spritesArray[1][i] = invaderType2;
+				this.spritesArray[1][invaderInCurrentRow] = invaderType2;
 			}
 
 			// create invader row3
 			InvaderSprite invaderType3 = null;
-			for (int i = 0; i < 12; i++) {
+			for (int invaderInCurrentRow = 0; invaderInCurrentRow < INVADERS_PER_ROW; invaderInCurrentRow++) {
 				invaderType3 = new InvaderSprite("inv2a.png", "inv2b.png");
-				int xIncrement = i * 30;
+				int xIncrement = invaderInCurrentRow * 30;
 
 				invaderType3.setX(80 + xIncrement);
-				invaderType3.setY(140);
+				invaderType3.setY(80 + (INVADER_ROW_SPACING * 2));
 				invaderType3.setVisible(true);
-				this.spritesArray[2][i] = invaderType3;
+				this.spritesArray[2][invaderInCurrentRow] = invaderType3;
 			}
 
 			// create invader row4
 			InvaderSprite invaderType4 = null;
-			for (int i = 0; i < 12; i++) {
+			for (int invaderInCurrentRow = 0; invaderInCurrentRow < INVADERS_PER_ROW; invaderInCurrentRow++) {
 				invaderType4 = new InvaderSprite("inv1a.png", "inv1b.png");
-				int xIncrement = i * 30;
+				int xIncrement = invaderInCurrentRow * 30;
 
 				invaderType4.setX(80 + xIncrement);
-				invaderType4.setY(170);
+				invaderType4.setY(80 + (INVADER_ROW_SPACING * 3));
 				invaderType4.setVisible(true);
-				this.spritesArray[3][i] = invaderType4;
+				this.spritesArray[3][invaderInCurrentRow] = invaderType4;
 			}
 
 			// create invader row5
 			InvaderSprite invaderType5 = null;
-			for (int i = 0; i < 12; i++) {
+			for (int invaderInCurrentRow = 0; invaderInCurrentRow < INVADERS_PER_ROW; invaderInCurrentRow++) {
 				invaderType5 = new InvaderSprite("inv1a.png", "inv1b.png");
-				int xIncrement = i * 30;
+				int xIncrement = invaderInCurrentRow * 30;
 
 				invaderType5.setX(80 + xIncrement);
-				invaderType5.setY(200);
+				invaderType5.setY(80 + (INVADER_ROW_SPACING * 4));
 				invaderType5.setVisible(true);
-				this.spritesArray[4][i] = invaderType5;
+				this.spritesArray[4][invaderInCurrentRow] = invaderType5;
 			}
 
 		} catch (Exception e) {
@@ -104,14 +116,11 @@ public class InvadersGameCanvas extends GameCanvas {
 	@Override
 	protected void calculateSpritePositions() {
 		if (this.gameLoopTick > ANIMATE_ON_TICK) {
-			System.out.println("moving");
 			this.moveInvaders();
 			this.gameLoopTick = 0;
 		} else {
 			this.gameLoopTick++;
-			// System.out.println("not moving");
 		}
-
 	}
 
 	/**
@@ -121,20 +130,35 @@ public class InvadersGameCanvas extends GameCanvas {
 	 * When the top row has moved, movement starts from bottom bow again.
 	 */
 	private void moveInvaders() {
-		if(this.animateInvaderRow == -1){
+		// if last row animated was top row, start back at bottom row
+		if (this.animateInvaderRow == -1) {
 			this.animateInvaderRow = 4;
 		}
-		
+
 		// TODO: check types here
 		for (Object o : this.spritesArray[this.animateInvaderRow]) {
 			InvaderSprite invader = (InvaderSprite) o;
 
-			// TODO: if moving left
-
-			// TODO: if moving right
-			invader.moveRight();
+			if (invader.getMovingDirection() == InvaderSprite.MovingDirection.RIGHT
+					&& invader.getCurrentPosition() < InvaderSprite.MAX_POS_RIGHT) {
+				invader.moveRight();
+			}
+			else if(invader.getMovingDirection() == InvaderSprite.MovingDirection.RIGHT
+					&& invader.getCurrentPosition() == InvaderSprite.MAX_POS_RIGHT){
+				invader.setMovingDirection(MovingDirection.LEFT);
+				invader.moveLeft();
+			}
+			else if (invader.getMovingDirection() == InvaderSprite.MovingDirection.LEFT
+					&& invader.getCurrentPosition() > InvaderSprite.MAX_POS_LEFT) {
+				invader.moveLeft();
+			}
+			else if(invader.getMovingDirection() == InvaderSprite.MovingDirection.LEFT
+					&& invader.getCurrentPosition() == InvaderSprite.MAX_POS_LEFT){
+				invader.setMovingDirection(MovingDirection.RIGHT);
+				invader.moveRight();
+			}
 		}
-		
+
 		this.animateInvaderRow--;
 	}
 
