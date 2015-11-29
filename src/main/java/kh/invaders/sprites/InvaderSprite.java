@@ -29,8 +29,22 @@ public class InvaderSprite extends Sprite {
 
 	@Override
 	public void moveRight() {
-		// TODO Auto-generated method stub
+
+		this.x = this.x + 6;
 		
+		//change alternative sprite
+		this.toggleDisplayAlternativeImage();
+		
+	}
+
+	private void toggleDisplayAlternativeImage() {
+		if(this.getDisplayAlternativeImage()){
+			this.setDisplayAlternativeImage(false);
+		}
+		else{
+			this.setDisplayAlternativeImage(true);
+		}
+	
 	}
 
 }

@@ -13,7 +13,7 @@ public class InvadersApp extends GameFrame {
 
 	public static void main(String[] args)
 	{
-	new InvadersApp().startUp(new InvadersGameCanvas() );
+		new InvadersApp().startUp(new InvadersGameCanvas() );
 	}
 }
 
