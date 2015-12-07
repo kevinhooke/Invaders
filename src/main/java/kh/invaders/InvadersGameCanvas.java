@@ -42,6 +42,12 @@ public class InvadersGameCanvas extends GameCanvas {
 
 	@Override
 	protected void init() {
+		
+		
+		/**
+		 * Rows 0 to 4 are the 5 rows of invaders. Each row has 13 Invader sprites.
+		 * 
+		 */
 		this.spritesArray = new Sprite[8][12];
 
 		try {
@@ -127,7 +133,7 @@ public class InvadersGameCanvas extends GameCanvas {
 	 * Each row is shifted in direction of movement, row at a time, starting
 	 * bottom row first and then each successive row above.
 	 * 
-	 * When the top row has moved, movement starts from bottom bow again.
+	 * When the top row has moved, movement starts from bottom row again.
 	 */
 	private void moveInvaders() {
 		// if last row animated was top row, start back at bottom row
@@ -140,20 +146,20 @@ public class InvadersGameCanvas extends GameCanvas {
 			InvaderSprite invader = (InvaderSprite) o;
 
 			if (invader.getMovingDirection() == InvaderSprite.MovingDirection.RIGHT
-					&& invader.getCurrentPosition() < InvaderSprite.MAX_POS_RIGHT) {
+					&& invader.getCurrentAnimationXPosition() < InvaderSprite.INVADER_MAX_X_POSITION_RIGHT) {
 				invader.moveRight();
 			}
 			else if(invader.getMovingDirection() == InvaderSprite.MovingDirection.RIGHT
-					&& invader.getCurrentPosition() == InvaderSprite.MAX_POS_RIGHT){
+					&& invader.getCurrentAnimationXPosition() == InvaderSprite.INVADER_MAX_X_POSITION_RIGHT){
 				invader.setMovingDirection(MovingDirection.LEFT);
 				invader.moveLeft();
 			}
 			else if (invader.getMovingDirection() == InvaderSprite.MovingDirection.LEFT
-					&& invader.getCurrentPosition() > InvaderSprite.MAX_POS_LEFT) {
+					&& invader.getCurrentAnimationXPosition() > InvaderSprite.INVADER_MAX_X_POSITION__LEFT) {
 				invader.moveLeft();
 			}
 			else if(invader.getMovingDirection() == InvaderSprite.MovingDirection.LEFT
-					&& invader.getCurrentPosition() == InvaderSprite.MAX_POS_LEFT){
+					&& invader.getCurrentAnimationXPosition() == InvaderSprite.INVADER_MAX_X_POSITION__LEFT){
 				invader.setMovingDirection(MovingDirection.RIGHT);
 				invader.moveRight();
 			}

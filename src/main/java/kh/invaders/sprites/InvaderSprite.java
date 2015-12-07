@@ -4,11 +4,15 @@ import kh.gameengine.ui.Sprite;
 
 public class InvaderSprite extends Sprite {
 
+	private static final int INVADER_Y_HIGHEST_POSITION = 8;
+	private static final int INVADER_Y_LOWEST_POSITION = 0;
+
 	private static final int ANIMATE_X_PIXELS = 6;
-	public static final int MAX_POS_RIGHT = 8;
-	public static final int MAX_POS_LEFT = -8;
+	public static final int INVADER_MAX_X_POSITION_RIGHT = 8;
+	public static final int INVADER_MAX_X_POSITION__LEFT = -8;
 	
-	private int currentPosition = 0;
+	private int currentAnimationXPosition = 0;
+	private int currentAnimationYPosition = INVADER_Y_HIGHEST_POSITION;
 	
 	private MovingDirection movingDirection = MovingDirection.RIGHT;
 	
@@ -37,7 +41,7 @@ public class InvaderSprite extends Sprite {
 	public void moveLeft() {
 
 		this.x = this.x - ANIMATE_X_PIXELS;
-		this.currentPosition--;
+		this.currentAnimationXPosition--;
 		//change alternative sprite
 		this.toggleDisplayAlternativeImage();
 
@@ -47,7 +51,7 @@ public class InvaderSprite extends Sprite {
 	public void moveRight() {
 
 		this.x = this.x + ANIMATE_X_PIXELS;
-		this.currentPosition++;
+		this.currentAnimationXPosition++;
 		//change alternative sprite
 		this.toggleDisplayAlternativeImage();
 		
@@ -63,12 +67,12 @@ public class InvaderSprite extends Sprite {
 	
 	}
 
-	public int getCurrentPosition() {
-		return currentPosition;
+	public int getCurrentAnimationXPosition() {
+		return this.currentAnimationXPosition;
 	}
 
-	public void setCurrentPosition(int currentPosition) {
-		this.currentPosition = currentPosition;
+	public void setCurrentAnimationXPosition(int currentXPosition) {
+		this.currentAnimationXPosition = currentXPosition;
 	}
 
 	public MovingDirection getMovingDirection() {
@@ -77,6 +81,14 @@ public class InvaderSprite extends Sprite {
 
 	public void setMovingDirection(MovingDirection movingDirection) {
 		this.movingDirection = movingDirection;
+	}
+
+	public int getCurrentAnimationYPosition() {
+		return currentAnimationYPosition;
+	}
+
+	public void setCurrentAnimationYPosition(int currentAnimationYPosition) {
+		this.currentAnimationYPosition = currentAnimationYPosition;
 	}
 
 }
