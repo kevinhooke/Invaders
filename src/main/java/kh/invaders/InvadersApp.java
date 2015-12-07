@@ -11,9 +11,13 @@ import kh.gameengine.GameFrame;
  */
 public class InvadersApp extends GameFrame {
 
+	public InvadersApp(int width, int height) {
+		super(width, height);
+	}
+
 	public static void main(String[] args)
 	{
-		new InvadersApp().startUp(new InvadersGameCanvas() );
+		new InvadersApp(580, 600).startUp(new InvadersGameCanvas() );
 	}
 }
 

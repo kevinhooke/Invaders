@@ -4,6 +4,7 @@ import kh.gameengine.ui.Sprite;
 
 public class InvaderSprite extends Sprite {
 
+	private static final int ANIMATE_Y_PIXELS = 10;
 	private static final int INVADER_Y_HIGHEST_POSITION = 8;
 	private static final int INVADER_Y_LOWEST_POSITION = 0;
 
@@ -33,7 +34,8 @@ public class InvaderSprite extends Sprite {
 
 	@Override
 	public void moveDown() {
-		// TODO Auto-generated method stub
+		this.y = this.y + ANIMATE_Y_PIXELS;
+		this.currentAnimationYPosition++;
 		
 	}
 

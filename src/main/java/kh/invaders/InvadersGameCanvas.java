@@ -7,13 +7,16 @@ import java.awt.Graphics2D;
 import kh.gameengine.ui.GameCanvas;
 import kh.gameengine.ui.PlayerSprite;
 import kh.gameengine.ui.Sprite;
+import kh.invaders.sprites.BaseSprite;
 import kh.invaders.sprites.InvaderSprite;
 import kh.invaders.sprites.InvaderSprite.MovingDirection;
 
 public class InvadersGameCanvas extends GameCanvas {
 
+	private static final int INVADER_X_START_POS = 80;
+	private static final int INVADER_Y_START_TOP_ROW = 140;
 	private static final int INVADERS_PER_ROW = 12;
-	private static final int INVADER_ROW_SPACING = 45;
+	private static final int INVADER_ROW_SPACING = 37;
 
 	private static final Color BACKGROUND_COLOR = new Color(0, 0, 0);
 
@@ -27,7 +30,7 @@ public class InvadersGameCanvas extends GameCanvas {
 	 */
 	private int animateInvaderRow = 4;
 
-	private static long ANIMATE_ON_TICK = 2;
+	private static long ANIMATE_ON_TICK = 1;
 
 	public InvadersGameCanvas() {
 		super();
@@ -58,8 +61,8 @@ public class InvadersGameCanvas extends GameCanvas {
 				invaderType1 = new InvaderSprite("inv3a.png", "inv3b.png");
 				int xIncrement = invaderInCurrentRow * 30;
 				
-				invaderType1.setX(80 + xIncrement);
-				invaderType1.setY(80 + (INVADER_ROW_SPACING * 0));
+				invaderType1.setX(INVADER_X_START_POS + xIncrement);
+				invaderType1.setY(INVADER_Y_START_TOP_ROW + (INVADER_ROW_SPACING * 0));
 				invaderType1.setVisible(true);
 				this.spritesArray[0][invaderInCurrentRow] = invaderType1;
 			}
@@ -70,8 +73,8 @@ public class InvadersGameCanvas extends GameCanvas {
 				invaderType2 = new InvaderSprite("inv2a.png", "inv2b.png");
 				int xIncrement = invaderInCurrentRow * 30;
 
-				invaderType2.setX(80 + xIncrement);
-				invaderType2.setY(80 + (INVADER_ROW_SPACING * 1));
+				invaderType2.setX(INVADER_X_START_POS + xIncrement);
+				invaderType2.setY(INVADER_Y_START_TOP_ROW + (INVADER_ROW_SPACING * 1));
 				invaderType2.setVisible(true);
 				this.spritesArray[1][invaderInCurrentRow] = invaderType2;
 			}
@@ -82,8 +85,8 @@ public class InvadersGameCanvas extends GameCanvas {
 				invaderType3 = new InvaderSprite("inv2a.png", "inv2b.png");
 				int xIncrement = invaderInCurrentRow * 30;
 
-				invaderType3.setX(80 + xIncrement);
-				invaderType3.setY(80 + (INVADER_ROW_SPACING * 2));
+				invaderType3.setX(INVADER_X_START_POS + xIncrement);
+				invaderType3.setY(INVADER_Y_START_TOP_ROW + (INVADER_ROW_SPACING * 2));
 				invaderType3.setVisible(true);
 				this.spritesArray[2][invaderInCurrentRow] = invaderType3;
 			}
@@ -94,8 +97,8 @@ public class InvadersGameCanvas extends GameCanvas {
 				invaderType4 = new InvaderSprite("inv1a.png", "inv1b.png");
 				int xIncrement = invaderInCurrentRow * 30;
 
-				invaderType4.setX(80 + xIncrement);
-				invaderType4.setY(80 + (INVADER_ROW_SPACING * 3));
+				invaderType4.setX(INVADER_X_START_POS + xIncrement);
+				invaderType4.setY(INVADER_Y_START_TOP_ROW + (INVADER_ROW_SPACING * 3));
 				invaderType4.setVisible(true);
 				this.spritesArray[3][invaderInCurrentRow] = invaderType4;
 			}
@@ -106,12 +109,22 @@ public class InvadersGameCanvas extends GameCanvas {
 				invaderType5 = new InvaderSprite("inv1a.png", "inv1b.png");
 				int xIncrement = invaderInCurrentRow * 30;
 
-				invaderType5.setX(80 + xIncrement);
-				invaderType5.setY(80 + (INVADER_ROW_SPACING * 4));
+				invaderType5.setX(INVADER_X_START_POS + xIncrement);
+				invaderType5.setY(INVADER_Y_START_TOP_ROW + (INVADER_ROW_SPACING * 4));
 				invaderType5.setVisible(true);
 				this.spritesArray[4][invaderInCurrentRow] = invaderType5;
 			}
 
+			//bases
+			BaseSprite base1 = null;
+			for(int currentBase = 0; currentBase < 4; currentBase++){
+				base1 = new BaseSprite("base.png", null);
+				base1.setX(120 + (currentBase * 90));
+				base1.setY(440);
+				base1.setVisible(true);
+				this.spritesArray[5][currentBase] = base1;
+			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -145,23 +158,29 @@ public class InvadersGameCanvas extends GameCanvas {
 		for (Object o : this.spritesArray[this.animateInvaderRow]) {
 			InvaderSprite invader = (InvaderSprite) o;
 
+			//moving right and not yey at edge
 			if (invader.getMovingDirection() == InvaderSprite.MovingDirection.RIGHT
 					&& invader.getCurrentAnimationXPosition() < InvaderSprite.INVADER_MAX_X_POSITION_RIGHT) {
 				invader.moveRight();
 			}
+			//moving right and reached edge, reset to move left
 			else if(invader.getMovingDirection() == InvaderSprite.MovingDirection.RIGHT
 					&& invader.getCurrentAnimationXPosition() == InvaderSprite.INVADER_MAX_X_POSITION_RIGHT){
 				invader.setMovingDirection(MovingDirection.LEFT);
-				invader.moveLeft();
+				invader.moveDown();
+				//invader.moveLeft();
 			}
+			//moving left and not yet at edge
 			else if (invader.getMovingDirection() == InvaderSprite.MovingDirection.LEFT
 					&& invader.getCurrentAnimationXPosition() > InvaderSprite.INVADER_MAX_X_POSITION__LEFT) {
 				invader.moveLeft();
 			}
+			//moving left and reached edge, reset to move right
 			else if(invader.getMovingDirection() == InvaderSprite.MovingDirection.LEFT
 					&& invader.getCurrentAnimationXPosition() == InvaderSprite.INVADER_MAX_X_POSITION__LEFT){
 				invader.setMovingDirection(MovingDirection.RIGHT);
-				invader.moveRight();
+				invader.moveDown();
+				//invader.moveRight();
 			}
 		}
 
